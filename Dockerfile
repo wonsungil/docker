@@ -18,7 +18,7 @@ RUN LC_ALL      en_US.UTF-8
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 ## Prepare apt-repository
-RUN pat-get install -y software-properties-common
+RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:ondrej/php
 RUN add-apt-repository -y ppa:nginx/stable
 
