@@ -38,6 +38,7 @@ RUN apt-get install -y nodejs
 ## install supervisord
 RUN apt-get install -y supervisor
 RUN mkdir -p /var/log/supervisor/conf.d/
+ADD supervisord.conf /etc/supervisor/conf.d/
 
 
 ## install php
@@ -54,6 +55,13 @@ RUN rm /etc/nginx/sites-enabled/default
 ADD php-fpm/php-ini-overrides.ini /etc/php/7.1/fpm/conf.d/99-overrides.ini
 ADD php-fpm/php-ini-overrides.ini /etc/php/7.1/cli/conf.d/99-overrides.ini
 
+## adduser
+RUN adduser --disabled-password --gecos "" w
+RUN usermod -a -G www-data w
+RUN usermod -a -G sudo w
+RUN echo w ALL=NOPASSWD: ALL >> /etc/sudoers
+
+
 ## nginx config
 ADD nginx/web /etc/nginx/sites-available/
 RUN ln -s /etc/nginx/sites-available/web /etc/nginx/sites-enabled/web
@@ -64,8 +72,8 @@ RUN service php7.1-fpm start
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin/ --filename=composer
 
-USER won
-RUN mkdir -p /home/won/.ssh && chmod 700 /home/won/.ssh
+USER w
+RUN mkdir -p /home/w/.ssh && chmod 700 /home/w/.ssh
 
 WORKDIR /app
 
@@ -73,4 +81,4 @@ EXPOSE 80 443
 
 VOLUME ["/app"]
 
-CMD ["sudo", "supervisord", "-n", "-c", "/etc/supervisor/supervisord/conf"]
+CMD ["sudo", "supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
