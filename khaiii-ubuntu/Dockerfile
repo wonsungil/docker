@@ -34,6 +34,11 @@ RUN sudo mkdir build
 WORKDIR /khaiii/build
 RUN pwd
 RUN sudo ~/.local/lib/python3.5/site-packages/cmake/data/bin/cmake -DCMAKE_INSTALL_PREFIX=/path/to/install ..
-RUN make all
+RUN sudo make all
+RUN sudo make resource
+RUN sudo make install
+# RUN sudo mkae package_python
+# WORKDIR /khaii/build/package_python
+
 
 EXPOSE 80 443
